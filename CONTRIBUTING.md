@@ -1,92 +1,103 @@
-# 🤝 Guia de Contribuição e Governança Git — MiniLang
+﻿# Guia de Contribuição e Alocação da Equipe - MiniLang
 
-Este documento estabelece as diretrizes de versionamento, fluxo de trabalho e padrões de desenvolvimento para a equipe da **A3 MiniLang** (UNIFACS 2026.2).
+Este documento estabelece a alocação de tarefas, responsabilidades e as diretrizes de desenvolvimento da equipe para a construção do compilador da **MiniLang** (Avaliação A3 de Teoria da Computação e Compiladores — UNIFACS 2026.2).
+
+Como o professor exige acompanhamento contínuo de processo e histórico de versionamento, adotamos um fluxo de trabalho colaborativo, transparente e com divisão de escopo bem delineada para assegurar o domínio individual de cada integrante na apresentação final.
 
 ---
 
-## 👥 1. Integrantes do Grupo & Atribuições
+## 📋 Alocação de Tarefas (3 Desenvolvedores)
 
-Espaço reservado para identificação dos membros da equipe e posterior distribuição das atribuições e marcos do compilador:
+Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro marcos cumulativos da MiniLang:
 
-| Integrante | Usuário GitHub | E-mail de Contato | Atribuição / Marco Principal |
-| :--- | :--- | :--- | :--- |
-| **Integrante 1** | `@` | | *A definir (ex: M1 - Léxico)* |
-| **Integrante 2** | `@` | | *A definir (ex: M2 - Sintático)* |
-| **Integrante 3** | `@` | | *A definir (ex: M3 - Semântico)* |
+### 1. 🔍 Analisador Léxico & Autômatos (Marco 1)
+* **Foco e Responsabilidades:**
+  * Implementar o scanner manual da linguagem no módulo `src/lexer/`.
+  * Mapear e reconhecer todas as 15 palavras reservadas, literais inteiros/booleanos, delimitadores e operadores.
+  * Implementar o tratamento de *lookahead* de 1 caractere para operadores relacionais e atribuição (`=`, `==`, `<`, `<=`, `>`, `>=`, `!=`).
+  * Descartar comentários de linha única iniciados por `#` e caracteres de espaço em branco (`\t`, `\r`, ` `).
+  * Rastrear estritamente o número de **linha** e **coluna** de cada token processado e emitir mensagens de erro léxico com localização precisa.
+  * Especificar e documentar formalmente o Autômato Finito Determinístico (AFD) com diagrama de estados e tabela de transições.
+  * Criar a bateria inicial de testes léxicos com casos válidos e inválidos em `tests/`.
+* **Arquivos e Diretórios:** `src/lexer/`, `tests/valid/`, `tests/invalid/`, `docs/M1_LEXICO.md`.
+* **Responsável:**
+  * 👤 *`[A Definir - Integrante 1]`*
 
-> 📌 **Alinhamento da Equipe**: 
-> - As atribuições individuais dos marcos iniciais serão definidas em conjunto pelo grupo antes do início de cada etapa.
-> - O **Marco 4 (Back-End, Otimização, Relatório Técnico e Apresentação)** será desenvolvido e integrado por todos os integrantes da equipe.
+---
 
+### 2. 🌲 Analisador Sintático & AST (Marco 2)
+* **Foco e Responsabilidades:**
+  * Formalizar a Gramática Livre de Contexto (GLC) da MiniLang em notação EBNF.
+  * Implementar o analisador sintático preditivo descendente recursivo (*Recursive Descent Parser*) em `src/parser/`.
+  * Modelar e instanciar os nós da Árvore Sintática Abstrata (AST) estruturada e navegável.
+  * Implementar o mecanismo de recuperação de erros em **Modo Pânico** (sincronização por tokens de parada como `;`, `}`, `fim`) para permitir a identificação de múltiplos erros sintáticos em uma única execução.
+  * Garantir a correta precedência e associatividade de operadores aritméticos, relacionais e lógicos.
+  * Identificar, resolver e documentar a ambiguidade clássica do *dangling else* (senão pendente).
+* **Arquivos e Diretórios:** `src/parser/`, `tests/valid/`, `tests/invalid/`, `docs/M2_SINTATICO.md`.
+* **Responsável:**
+  * 👤 *`[A Definir - Integrante 2]`*
 
-## 🌿 2. Estrutura de Branches (Git Flow)
+---
 
-Para evitar conflitos de merge e garantir estabilidade, seguimos um modelo simplificado de branches:
+### 3. 🛡️ Analisador Semântico & Tabela de Símbolos (Marco 3)
+* **Foco e Responsabilidades:**
+  * Implementar a estrutura de dados da Tabela de Símbolos em `src/semantic/`, suportando escopos estáticos aninhados (global e blocos locais).
+  * Registrar metadados essenciais de cada símbolo: identificador, tipo (`inteiro`, `booleano`), escopo e posição (linha/coluna) da declaração.
+  * Implementar o verificador de tipos (*Type Checker*), validando regras de atribuição, operações aritméticas/lógicas e condições de comandos de controle (`se`, `enquanto`).
+  * Identificar e emitir erros semânticos precisos: variável não declarada, redeclaração no mesmo escopo, incompatibilidade de tipo e `leia` em identificadores não declarados.
+  * Anotar os nós da AST com seus respectivos tipos inferidos.
+  * Implementar o bônus avaliativo (+0,5 pt): detecção em tempo de compilação de variáveis lidas antes de serem inicializadas.
+* **Arquivos e Diretórios:** `src/semantic/`, `tests/valid/`, `tests/invalid/`, `docs/M3_SEMANTICO.md`.
+* **Responsável:**
+  * 👤 *`[A Definir - Integrante 3]`*
 
+---
+
+### 4. ⚙️ Back-End, Otimização e Apresentação (Marco 4)
+* **Foco e Responsabilidades:**
+  * Implementar o interpretador direto da AST (*Tree-walking Interpreter*) via padrão *Visitor* ou gerador de Código de Três Endereços (TAC) em `src/backend/`.
+  * Implementar a extensão obrigatória do edital (Recomendada: Opção D — comandos `para` e `repita ... até` via desaçucaramento sintático na própria AST).
+  * Desenvolver e demonstrar ao menos uma técnica de otimização de código (*Constant Folding* / propagação estática de constantes), exibindo métricas de "antes e depois".
+  * Integrar o pipeline completo no comando unificado `minilang.py`.
+  * Redigir o Relatório Técnico acadêmico final de 6 a 10 páginas (decisões, gramática, AFD, ferramentas e uso de IA).
+  * Preparar a apresentação de 15 minutos com demonstração prática ao vivo e treinamento mútuo para a arguição individual.
+* **Arquivos e Diretórios:** `src/backend/`, `minilang.py`, `docs/relatorio_final.pdf`.
+* **Responsáveis:**
+  * 👥 *Toda a Equipe (Integrante 1, Integrante 2 e Integrante 3 em conjunto)*
+
+---
+
+## 🌿 Diretrizes de Git & Versionamento
+
+Para garantir transparência, histórico contínuo e nota máxima no critério de processo da A3:
+
+### 1. Modelo de Branches
+* `main`: Branch de produção/estabilidade. Recebe apenas merges dos marcos finalizados e aprovados (ex: tags `v1.0-m1`, `v2.0-m2`).
+* `develop`: Branch de integração contínua da equipe.
+* `feature/m1-lexer`, `feature/m2-parser`, `feature/m3-semantic`, `feature/m4-backend`: Branches de desenvolvimento individual.
+
+### 2. Padrão de Commits Semânticos (PT-BR)
+Todos os commits devem ser frequentes, atômicos e redigidos em português com os prefixos:
+* `feat:` Nova funcionalidade (ex: `feat: implementa scanner com lookahead para relacionais`).
+* `fix:` Correção de bug (ex: `fix: corrige contagem de coluna ao pular comentarios com hashtag`).
+* `test:` Adição/atualização de casos de teste (ex: `test: adiciona programas com erros lexicos`).
+* `docs:` Documentação e diagramas (ex: `docs: adiciona tabela de transicoes de estados do AFD`).
+* `refactor:` Melhoria de código sem alterar regra de negócio.
+
+### 3. Padrão Obrigatório de Mensagens de Erro
+Todas as fases do compilador devem emitir mensagens formatadas no padrão:
 ```text
-main           (Apenas entregas estáveis e tags de marcos: v1.0-m1, v2.0-m2, etc.)
-  │
-develop        (Branch de integração contínua da equipe)
-  │
-  ├── feature/m1-lexer        (Trabalho do Membro 1 no Marco 1)
-  ├── feature/m2-parser       (Trabalho do Membro 2 no Marco 2)
-  ├── feature/m3-semantic     (Trabalho do Membro 3 no Marco 3)
-  └── feature/m4-backend      (Trabalho conjunto no Marco 4)
+[FASE] Linha L, Coluna C: Descrição objetiva do erro.
 ```
-
-### Regras de Ouro de Branches:
-* **Nenhum membro faz commit direto na branch `main`**.
-* O desenvolvimento de novas funcionalidades ocorre em branches `feature/*`.
-* Ao concluir uma etapa, o membro abre um Pull Request para a branch `develop`.
-* A branch `main` só recebe merges a partir de `develop` quando o marco estiver 100% testado e aprovado.
+*Exemplos:*
+* `[LÉXICO] Linha 5, Coluna 12: Caractere inválido '@' não reconhecido.`
+* `[SINTÁTICO] Linha 14, Coluna 8: Era esperado ';' após o comando, mas foi encontrado 'fim'.`
+* `[SEMÂNTICO] Linha 22, Coluna 4: Variável 'total' não declarada neste escopo.`
 
 ---
 
-## ✍️ 3. Padrão de Commits Semânticos (PT-BR)
+## 🔍 Revisão e Preparação para Arguição Oral
 
-Para manter o histórico do repositório legível, profissional e demonstrar a evolução contínua para o professor, todos os commits devem seguir o padrão semântico em **Português**:
-
-| Prefixo | Significado | Exemplo Prático |
-| :--- | :--- | :--- |
-| `feat:` | Nova funcionalidade adicionada | `feat: implementa scanner com lookahead para operadores relacionais` |
-| `fix:` | Correção de defeito ou bug | `fix: corrige contagem de coluna ao ignorar comentarios com hashtag` |
-| `test:` | Adição ou alteração de testes | `test: adiciona casos invalidos para variaveis com caracteres especiais` |
-| `docs:` | Alterações em documentação | `docs: adiciona tabela de transicoes de estados do AFD no M1` |
-| `refactor:` | Refatoração de código sem alterar regra | `refactor: modulariza definicao dos tipos de token em modulo proprio` |
-| `chore:` | Tarefas de build, gitignore ou setup | `chore: configura gitignore e estrutura basica de pastas` |
-
----
-
-## ⚠️ 4. Política Anti-Penalização de Processo
-
-> **Aviso Oficial do Professor**: *"O histórico de commits conta como evidência de processo; commit único na véspera será penalizado."*
-
-Para garantir nota máxima no critério de processo:
-1. Faça commits **atômicos e frequentes** (a cada função implementada ou teste criado).
-2. Cada membro deve commitar a partir do seu próprio usuário Git configurado (`git config user.name` e `git config user.email`).
-3. Nunca acumule semanas de trabalho para commitar em bloco nas horas finais antes do prazo.
-
----
-
-## 🚨 5. Padrão Obrigatório de Mensagens de Erro
-
-O compilador **deve obrigatoriamente** emitir erros detalhados contendo:
-- **Fase** da compilação (`[LÉXICO]`, `[SINTÁTICO]` ou `[SEMÂNTICO]`);
-- **Linha** e **Coluna** exatas onde a anomalia foi detectada;
-- **Mensagem descritiva** e objetiva.
-
-### Formato Padrão:
-```text
-[LÉXICO] Linha 12, Coluna 5: Caractere inválido '@' não reconhecido no alfabeto da MiniLang.
-[SINTÁTICO] Linha 18, Coluna 14: Era esperado ';' após o comando de atribuição, mas foi encontrado 'fim'.
-[SEMÂNTICO] Linha 25, Coluna 8: A variável 'resultado' foi utilizada sem declaração prévia.
-```
-
----
-
-## 🔍 6. Revisão por Pares (Code Review) & Preparação para a Arguição
-
-Lembre-se de que na apresentação final (M4), haverá **arguição oral individual**. Se um integrante desconhecer como o código funciona, haverá penalização individual ou em grupo.
-
-* **Revisão Obrigatória**: Antes de integrar uma branch em `develop`, os outros integrantes devem ler o código e entender o que foi feito.
-* **Mini-Reuniões Semanais**: Recomendamos que a equipe faça reuniões curtas de 15 minutos para que o responsável pelo marco apresente o que programou para os colegas.
+Lembre-se: no Marco 4, o professor realizará perguntas individuais sobre qualquer parte do código. Para proteger a nota de todos:
+1. Faça *Code Review* das alterações dos colegas antes de realizar o merge em `develop`.
+2. Realize reuniões rápidas de alinhamento para que cada desenvolvedor demonstre como sua fase foi implementada.
