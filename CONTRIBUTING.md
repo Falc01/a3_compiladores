@@ -1,41 +1,23 @@
-﻿# 🤝 Guia de Contribuição e Governança Git — MiniLang
+# 🤝 Guia de Contribuição e Governança Git — MiniLang
 
 Este documento estabelece as diretrizes de versionamento, fluxo de trabalho e padrões de desenvolvimento para a equipe da **A3 MiniLang** (UNIFACS 2026.2).
 
 ---
 
-## 👥 1. Divisão Formal de Trabalho na Equipe
+## 👥 1. Integrantes do Grupo & Atribuições
 
-A equipe é composta por **3 integrantes**. Para garantir a clareza de escopo e domínio técnico exigido na arguição individual, o trabalho é estruturado em responsabilidades dedicadas para os Marcos 1 a 3, e integração conjunta no Marco 4:
+Espaço reservado para identificação dos membros da equipe e posterior distribuição das atribuições e marcos do compilador:
 
-1. **Marco 1 — Analisador Léxico (`Membro 1`)**:
-   - Especificação e desenho formal do AFD (Autômato Finito Determinístico);
-   - Implementação do Scanner e tabela de tokens em `src/lexer/`;
-   - Tratamento de lookahead (`=`, `==`, `<`, `<=`, `>`, `>=`, `!=`) e descarte de comentários `#`;
-   - Rastreamento estrito de linha e coluna;
-   - Suíte de testes do M1 e relatório de 1 página.
+| Integrante | Usuário GitHub | E-mail de Contato | Atribuição / Marco Principal |
+| :--- | :--- | :--- | :--- |
+| **Integrante 1** | `@` | | *A definir (ex: M1 - Léxico)* |
+| **Integrante 2** | `@` | | *A definir (ex: M2 - Sintático)* |
+| **Integrante 3** | `@` | | *A definir (ex: M3 - Semântico)* |
 
-2. **Marco 2 — Analisador Sintático & AST (`Membro 2`)**:
-   - Modelagem da gramática formal EBNF da MiniLang;
-   - Implementação do parser descendente recursivo em `src/parser/`;
-   - Construção dos nós da Árvore Sintática Abstrata (AST);
-   - Implementação da recuperação de erros sintáticos em **Modo Pânico**;
-   - Resolução e documentação do problema do *dangling else*.
+> 📌 **Alinhamento da Equipe**: 
+> - As atribuições individuais dos marcos iniciais serão definidas em conjunto pelo grupo antes do início de cada etapa.
+> - O **Marco 4 (Back-End, Otimização, Relatório Técnico e Apresentação)** será desenvolvido e integrado por todos os integrantes da equipe.
 
-3. **Marco 3 — Analisador Semântico & Tipos (`Membro 3`)**:
-   - Implementação da Tabela de Símbolos com escopos aninhados em `src/semantic/`;
-   - Checagem e inferência estrita de tipos (`inteiro` e `booleano`);
-   - Detecção de variáveis não declaradas, redeclarações e condições não-booleanas;
-   - Anotação da AST com tipos validados;
-   - Implementação do bônus de detecção de variável não inicializada.
-
-4. **Marco 4 — Back-End, Otimização e Apresentação (`Equipe Completa`)**:
-   - Integração completa do compilador/interpretador em `src/backend/`;
-   - Implementação da otimização de código (*Constant Folding*);
-   - Redação do Relatório Técnico final (artigo de 6 a 10 páginas);
-   - Preparação dos slides e ensaio para a demonstração ao vivo e arguição oral individual.
-
----
 
 ## 🌿 2. Estrutura de Branches (Git Flow)
 

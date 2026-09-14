@@ -1,4 +1,4 @@
-﻿# 💻 MiniLang — Compilador e Interpretador
+# 💻 MiniLang — Compilador e Interpretador
 
 Projeto prático de avaliação semestral (**A3**) da disciplina de **Teoria da Computação e Compiladores (0006964)**.  
 **Universidade Salvador (UNIFACS)** — Período Letivo: **2026.2**  
@@ -7,20 +7,6 @@ Projeto prático de avaliação semestral (**A3**) da disciplina de **Teoria da 
 
 ---
 
-## 👥 Equipe & Divisão de Responsabilidades
-
-O projeto é desenvolvido por uma equipe de **3 integrantes**, com responsabilidades modulares divididas por marco e cooperação integrada na etapa final:
-
-| Integrante | Papel Principal | Marco Sob Responsabilidade Direta |
-| :--- | :--- | :--- |
-| **`[Membro 1 - Nome a definir]`** | Engenheiro de Análise Léxica | **M1: Analisador Léxico (Tokens, AFD, Lookahead, Erros)** |
-| **`[Membro 2 - Nome a definir]`** | Engenheiro de Análise Sintática | **M2: Analisador Sintático (Gramática EBNF, AST, Modo Pânico, Dangling Else)** |
-| **`[Membro 3 - Nome a definir]`** | Engenheiro de Análise Semântica | **M3: Analisador Semântico (Tabela de Símbolos, Inferência e Checagem de Tipos)** |
-| **Equipe Completa (Todos)** | Integração & Apresentação | **M4: Back-End (Interpretador/TAC), Otimização, Relatório Técnico e Demo** |
-
-> ℹ️ *Os nomes dos integrantes serão preenchidos conforme definição formal da equipe.*
-
----
 
 ## 🚀 Como Executar o Compilador (Linha Única)
 
@@ -104,10 +90,11 @@ a3_comp/
 
 ---
 
-## 📜 Regras de Contribuição & Git
+## 📜 Governança, Equipe & Contribuição
 
 Consulte o arquivo [`CONTRIBUTING.md`](./CONTRIBUTING.md) para detalhes sobre:
+* **Integrantes do grupo** e definição das atribuições de cada marco;
 * Padrão de commits semânticos em Português (`feat:`, `fix:`, `test:`, `docs:`);
-* Política anti-penalização (commits frequentes de todos os 3 membros);
+* Política anti-penalização (commits frequentes de todos os membros);
 * Estrutura de branches (`main`, `develop`, `feature/*`);
-* Padrão de formatação de mensagens de erro.
+* Padrão oficial de formatação de mensagens de erro.
