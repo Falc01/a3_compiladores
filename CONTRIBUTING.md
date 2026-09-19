@@ -35,7 +35,7 @@ Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro m
   * Identificar, resolver e documentar a ambiguidade clássica do *dangling else* (senão pendente).
 * **Arquivos e Diretórios:** `src/parser/`, `tests/valid/`, `tests/invalid/`, `docs/M2_SINTATICO.md`.
 * **Responsável:**
-  * 👤 *`[A Definir - Integrante 2]`*
+  * 👤 **Isabelle Maciel dos Santos** (RA: `12723118051` | GitHub: `@isabellesmaciel`)
 
 ---
 
