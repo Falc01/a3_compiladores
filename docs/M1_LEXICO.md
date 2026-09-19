@@ -175,6 +175,16 @@ $$\text{Token} = \langle \text{tipo}, \text{lexema}, \text{valor}, \text{linha},
 | **Delimitador** | `TK_PONTO` | `\.` | `.` | `None` |
 | **Sentinela** | `TK_EOF` | `\0` | `EOF` | `None` |
 
+### 5.2. Integração Formal da Extensão Obrigatória (Opção D: Comandos `para` e `repita ... até`)
+
+A escolha oficial da **Opção D** reflete-se diretamente desde a primeira fase de compilação:
+* **Princípio da Continuidade de Pipeline**: Para que o analisador sintático (Marco 2) consiga processar as regras gramaticais `<comando_para>` e `<comando_repita>` e realizar o desaçucaramento (*desugaring*) na AST, o analisador léxico deve obrigatoriamente reconhecer as três palavras-chave correspondentes:
+  1. `para` $\to$ `TK_PARA`
+  2. `repita` $\to$ `TK_REPITA`
+  3. `até` $\to$ `TK_ATE`
+* **Ortografia e Acentuação UTF-8**: A palavra-chave `até` introduz o caractere acentuado `é` no alfabeto $\Sigma$. Como a MiniLang nativamente já adota acentuação em língua portuguesa (`ã` em `senão` e `não`), o leitor UTF-8 processa esses caracteres multibyte preservando com exatidão a contagem de colunas para mensagens de erro.
+* **Economia de Estados no AFD**: As três novas palavras reservadas respeitam a regra de transição de identificadores no estado $q_{\text{id}}$. Portanto, não há inflação de estados no autômato; a distinção ocorre via busca $\mathcal{O}(1)$ na tabela hash de palavras reservadas ao concluir a leitura da cadeia.
+
 ---
 
 ## 📐 6. Modelagem Matemática do Autômato Finito Determinístico (AFD)
@@ -357,7 +367,7 @@ src/lexer/
 
 ## 🧪 10. Matriz de Verificação & Testes Experimentais (*How-To*)
 
-Para atender integralmente aos critérios do edital e garantir a nota máxima da rubrica (0,5 pt de suíte de testes), o projeto inclui 10 baterias de teste automatizadas divididas em duas classes:
+Para atender integralmente aos critérios do edital e garantir a nota máxima da rubrica (0,5 pt de suíte de testes), o projeto inclui 11 baterias de teste automatizadas divididas em duas classes:
 
 ### 10.1. Casos Válidos (`tests/valid/`)
 1. **`m1_tokens_palavras_chave.ml`**: Testa o reconhecimento isolado e combinado de todas as 18 palavras reservadas (15 base + 3 da Opção D: `para`, `repita`, `até`).
@@ -365,6 +375,7 @@ Para atender integralmente aos critérios do edital e garantir a nota máxima da
 3. **`m1_tokens_expressoes_aritmeticas.ml`**: Testa operadores aritméticos com identificadores e literais numéricos (`+`, `-`, `*`, `/`, `%`).
 4. **`m1_comentarios_e_espacos.ml`**: Testa comentários com `#` no início, meio e fim de linhas, garantindo preservação de linhas e colunas.
 5. **`m1_programa_fatorial_completo.ml`**: Programa MiniLang completo e funcional demonstrando o pipeline integrado.
+6. **`m1_extensao_opcao_d.ml`**: Valida o reconhecimento e tokenização das estruturas de controle da extensão obrigatória (`para`, `repita`, `até`).
 
 ### 10.2. Casos Inválidos Provocados (`tests/invalid/`)
 1. **`m1_erro_caractere_invalido_arroba.ml`**: Contém o caractere `@` fora do alfabeto, testando reporte exato de linha e coluna.
