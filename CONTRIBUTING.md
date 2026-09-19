@@ -21,7 +21,7 @@ Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro m
   * Criar a bateria inicial de testes léxicos com casos válidos e inválidos em `tests/`.
 * **Arquivos e Diretórios:** `src/lexer/`, `tests/valid/`, `tests/invalid/`, `docs/M1_LEXICO.md`.
 * **Responsável:**
-  * 👤 **João Spinola Falcão** (RA: `12723116406` | GitHub: `@Falc01`)
+  * 👤 **João Spinola Falcão** (RA: `12723116405` | GitHub: `@Falc01`)
 
 ---
 
