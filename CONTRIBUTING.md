@@ -63,7 +63,7 @@ Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro m
   * Preparar a apresentação de 15 minutos com demonstração prática ao vivo e treinamento mútuo para a arguição individual.
 * **Arquivos e Diretórios:** `src/backend/`, `minilang.py`, `docs/relatorio_final.pdf`.
 * **Responsáveis:**
-  * 👥 *Toda a Equipe (João Spinola Falcão, Integrante 2 e Integrante 3 em conjunto)*
+  * 👥 *Toda a Equipe (João Spinola Falcão, Isabelle Maciel dos Santos e Integrante 3 em conjunto)*
 
 ---
 
