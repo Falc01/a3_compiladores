@@ -71,10 +71,10 @@ Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro m
 
 Para garantir transparência, histórico contínuo e nota máxima no critério de processo da A3:
 
-### 1. Modelo de Branches
-* `main`: Branch de produção/estabilidade. Recebe apenas merges dos marcos finalizados e aprovados (ex: tags `v1.0-m1`, `v2.0-m2`).
-* `develop`: Branch de integração contínua da equipe.
-* `feature/m1-lexer`, `feature/m2-parser`, `feature/m3-semantic`, `feature/m4-backend`: Branches de desenvolvimento individual.
+### 1. Fluxo Simplificado de Versionamento (Branch Única: `main`)
+Para maximizar a agilidade da equipe e evitar atritos de mesclagem complexos, todo o desenvolvimento é centralizado diretamente na branch principal (`main`):
+* **Protocolo Pré-Push Obrigatório**: Antes de qualquer `git push`, execute obrigatoriamente `git pull origin main` para integrar eventuais commits recentes dos seus colegas de equipe.
+* **Commits Atômicos & Individuais**: Cada membro commita diretamente a partir de seu usuário Git configurado, registrando a autoria de cada marco de forma incremental.
 
 ### 2. Padrão de Commits Semânticos (PT-BR)
 Todos os commits devem ser frequentes, atômicos e redigidos em português com os prefixos:
@@ -99,5 +99,5 @@ Todas as fases do compilador devem emitir mensagens formatadas no padrão:
 ## 🔍 Revisão e Preparação para Arguição Oral
 
 Lembre-se: no Marco 4, o professor realizará perguntas individuais sobre qualquer parte do código. Para proteger a nota de todos:
-1. Faça *Code Review* das alterações dos colegas antes de realizar o merge em `develop`.
+1. Faça leitura e *Code Review* das alterações dos colegas conforme o código for integrado na `main`.
 2. Realize reuniões rápidas de alinhamento para que cada desenvolvedor demonstre como sua fase foi implementada.
