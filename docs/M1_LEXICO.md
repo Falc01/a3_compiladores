@@ -35,7 +35,7 @@ A especificação do analisador léxico é formalizada a seguir por meio de requ
 
 | ID | Requisito Funcional | Descrição Operacional & Regra de Negócio |
 | :--- | :--- | :--- |
-| **RF-LEX-01** | **Reconhecimento de Palavras Reservadas** | O scanner deve identificar exaustivamente as **15 palavras reservadas** da MiniLang: `programa`, `var`, `inteiro`, `booleano`, `se`, `senão`, `enquanto`, `escreva`, `leia`, `verdadeiro`, `falso`, `e`, `ou`, `não`, `fim`. |
+| **RF-LEX-01** | **Reconhecimento de Palavras Reservadas** | O scanner deve identificar exaustivamente as **18 palavras reservadas** da MiniLang: as 15 palavras base (`programa`, `var`, `inteiro`, `booleano`, `se`, `senão`, `enquanto`, `escreva`, `leia`, `verdadeiro`, `falso`, `e`, `ou`, `não`, `fim`) e as 3 palavras da extensão oficial Opção D (`para`, `repita`, `até`). |
 | **RF-LEX-02** | **Reconhecimento de Identificadores** | Deve reconhecer identificadores pelo padrão `[A-Za-z_][A-Za-z0-9_]*`. |
 | **RF-LEX-03** | **Precedência Palavra-Chave vs. Identificador** | Em caso de colisão sintática, palavras reservadas possuem **precedência estrita** sobre identificadores comuns. A resolução deve ocorrer em tempo constante $\mathcal{O}(1)$ via tabela hash. |
 | **RF-LEX-04** | **Reconhecimento de Literais Inteiros** | Deve reconhecer sequências numéricas decimais `[0-9]+` e computar o atributo semântico numérico correspondente (inteiro nativo). |
@@ -67,7 +67,7 @@ A especificação do analisador léxico é formalizada a seguir por meio de requ
 
 | Critério Oficial do Edital | Pontuação | Requisitos Vinculados | Evidência Técnica |
 | :--- | :---: | :--- | :--- |
-| **Reconhece todas as categorias de tokens da especificação** | **3,0 pts** | RF-LEX-01 a 06, 08 a 10 | Bateria de testes de aceitação em `tests/valid/` cobrindo os 15 identificadores, números e pontuação. |
+| **Reconhece todas as categorias de tokens da especificação** | **3,0 pts** | RF-LEX-01 a 06, 08 a 10 | Bateria de testes de aceitação em `tests/valid/` cobrindo as 18 palavras reservadas, identificadores, números e pontuação. |
 | **Trata corretamente lookahead: =/==, </<=, >/>= e !=** | **1,0 pt** | RF-LEX-07, RF-LEX-15 | Função `espiar()` com desambiguação e teste de `!` inválido em `tests/invalid/`. |
 | **Descarta comentários e espaços; rastreia linha e coluna** | **1,0 pt** | RF-LEX-11 a 13 | Comentários com `#` ignorados e rastreamento de coordenadas testado em `tests/valid/`. |
 | **Reporta erro léxico com posição correta** | **1,0 pt** | RF-LEX-14, RF-LEX-16 | Saída padronizada `[LÉXICO] Linha L, Coluna C: ...` validada em `tests/invalid/`. |
@@ -116,7 +116,7 @@ Diante de uma sequência que possa casar com mais de um padrão de token, o anal
 A gramática da MiniLang estabelece que uma palavra reservada (como `enquanto` ou `se`) possui exatamente a mesma forma ortográfica de um identificador (`[A-Za-z_][A-Za-z0-9_]*`).
 
 **Decisão de Arquitetura**:  
-Em vez de construir ramos dedicados no AFD para cada uma das 15 palavras reservadas (o que aumentaria o autômato em dezenas de estados redundantes), adota-se a técnica canônica do *Dragon Book*:
+Em vez de construir ramos dedicados no AFD para cada uma das 18 palavras reservadas (o que aumentaria o autômato em dezenas de estados redundantes), adota-se a técnica canônica do *Dragon Book*:
 1. O AFD transita e aceita a cadeia genérica `[A-Za-z_][A-Za-z0-9_]*` em um estado único de identificador $q_{\text{id}}$;
 2. Ao atingir o término do lexema, o scanner consulta uma **Tabela Hash de Palavras Reservadas** ($\mathcal{O}(1)$);
 3. Se o lexema estiver presente na tabela, emite o token específico da palavra-chave (`TK_SE`, `TK_ENQUANTO`, etc.);
@@ -143,6 +143,9 @@ $$\text{Token} = \langle \text{tipo}, \text{lexema}, \text{valor}, \text{linha},
 | **Palavra Reservada** | `TK_ESCREVA` | `escreva` | `escreva` | `None` |
 | **Palavra Reservada** | `TK_LEIA` | `leia` | `leia` | `None` |
 | **Palavra Reservada** | `TK_FIM` | `fim` | `fim` | `None` |
+| **Palavra Reservada (Ext. D)** | `TK_PARA` | `para` | `para` | `None` |
+| **Palavra Reservada (Ext. D)** | `TK_REPITA` | `repita` | `repita` | `None` |
+| **Palavra Reservada (Ext. D)** | `TK_ATE` | `até` | `até` | `None` |
 | **Literal Booleano** | `TK_VERDADEIRO` | `verdadeiro` | `verdadeiro` | `True` (bool nativo) |
 | **Literal Booleano** | `TK_FALSO` | `falso` | `falso` | `False` (bool nativo) |
 | **Operador Lógico** | `TK_OP_E` | `e` | `e` | `None` |
@@ -184,8 +187,8 @@ $$M = (Q, \Sigma, \delta, q_0, F)$$
    $$Q = \{ q_0, q_{\text{id}}, q_{\text{num}}, q_{=}, q_{==}, q_{<}, q_{<=}, q_{>}, q_{>=}, q_{!}, q_{!=}, q_{\text{op}}, q_{\text{delim}}, q_{\text{coment}}, q_{\text{erro}} \}$$
 
 2. **Alfabeto de Entrada ($\Sigma$)**:
-   Conjunto de todos os caracteres ASCII imprimíveis, caracteres de espaçamento (`\t`, `\r`, `\n`, ` `) e caracteres acentuados suportados em palavras-chave da língua portuguesa (`ã`).
-   $$\Sigma = \{ A\dots Z, a\dots z, 0\dots 9, \_, +, -, *, /, \%, =, <, >, !, (, ), \{, \}, ;, :, ,, ., \#, \text{whitespace} \}$$
+   Conjunto de todos os caracteres ASCII imprimíveis, caracteres de espaçamento (`\t`, `\r`, `\n`, ` `) e caracteres acentuados suportados em palavras-chave da língua portuguesa (`ã` em `senão`/`não`, `é` em `até`).
+   $$\Sigma = \{ A\dots Z, a\dots z, 0\dots 9, \_, +, -, *, /, \%, =, <, >, !, (, ), \{, \}, ;, :, ,, ., \#, \text{whitespace}, \text{acentos (ã, é)} \}$$
 
 3. **Estado Inicial ($q_0$)**:
    $q_0 \in Q$ é o estado no qual o autômato inicia a varredura de cada novo token.
@@ -345,7 +348,7 @@ src/lexer/
 ```
 
 ### 9.1. Responsabilidades de Cada Módulo:
-* **`token.py`**: Define o enum `TokenType` contendo as 38 categorias de tokens da MiniLang e a classe `@dataclass Token` que armazena `tipo`, `lexema`, `valor`, `linha` e `coluna`, implementando o método `__repr__` para exibição formatada na CLI.
+* **`token.py`**: Define o enum `TokenType` contendo as 41 categorias de tokens da MiniLang (38 base + 3 da Extensão Opção D) e a classe `@dataclass Token` que armazena `tipo`, `lexema`, `valor`, `linha` e `coluna`, implementando o método `__repr__` para exibição formatada na CLI.
 * **`erros.py`**: Define a classe `ErroLexico(Exception)` contendo `mensagem`, `linha` e `coluna`, garantindo a padronização:
   `[LÉXICO] Linha L, Coluna C: Descrição`.
 * **`lexer.py`**: Encapsula a lógica da máquina de estados finitos através da classe `Lexer`. Possui métodos de buffering (`avancar()`, `espiar()`), método iterador `proximo_token()` e o método `tokenizar_tudo()` que gera a lista completa de tokens para a interface de linha de comando.
@@ -357,7 +360,7 @@ src/lexer/
 Para atender integralmente aos critérios do edital e garantir a nota máxima da rubrica (0,5 pt de suíte de testes), o projeto inclui 10 baterias de teste automatizadas divididas em duas classes:
 
 ### 10.1. Casos Válidos (`tests/valid/`)
-1. **`m1_tokens_palavras_chave.ml`**: Testa o reconhecimento isolado e combinado de todas as 15 palavras reservadas.
+1. **`m1_tokens_palavras_chave.ml`**: Testa o reconhecimento isolado e combinado de todas as 18 palavras reservadas (15 base + 3 da Opção D: `para`, `repita`, `até`).
 2. **`m1_tokens_operadores_relacionais.ml`**: Testa exaustivamente todos os casos de lookahead (`==`, `!=`, `<`, `<=`, `>`, `>=`).
 3. **`m1_tokens_expressoes_aritmeticas.ml`**: Testa operadores aritméticos com identificadores e literais numéricos (`+`, `-`, `*`, `/`, `%`).
 4. **`m1_comentarios_e_espacos.ml`**: Testa comentários com `#` no início, meio e fim de linhas, garantindo preservação de linhas e colunas.

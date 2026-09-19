@@ -13,7 +13,7 @@ Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro m
 ### 1. 🔍 Analisador Léxico & Autômatos (Marco 1)
 * **Foco e Responsabilidades:**
   * Implementar o scanner manual da linguagem no módulo `src/lexer/`.
-  * Mapear e reconhecer todas as 15 palavras reservadas, literais inteiros/booleanos, delimitadores e operadores.
+  * Mapear e reconhecer todas as 18 palavras reservadas (15 base + 3 da Extensão Opção D: `para`, `repita`, `até`), literais inteiros/booleanos, delimitadores e operadores.
   * Implementar o tratamento de *lookahead* de 1 caractere para operadores relacionais e atribuição (`=`, `==`, `<`, `<=`, `>`, `>=`, `!=`).
   * Descartar comentários de linha única iniciados por `#` e caracteres de espaço em branco (`\t`, `\r`, ` `).
   * Rastrear estritamente o número de **linha** e **coluna** de cada token processado e emitir mensagens de erro léxico com localização precisa.

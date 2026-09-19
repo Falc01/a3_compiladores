@@ -1,4 +1,4 @@
-﻿# 💻 MiniLang — Compilador e Interpretador
+# 💻 MiniLang — Compilador e Interpretador
 
 Projeto prático de avaliação semestral (**A3**) da disciplina de **Teoria da Computação e Compiladores (0006964)**.  
 **Universidade Salvador (UNIFACS)** — Período Letivo: **2026.2**  
@@ -44,7 +44,7 @@ A **MiniLang** é uma linguagem imperativa estruturada com tipagem estática e s
 
 | Categoria | Especificação Oficial do Edital |
 | :--- | :--- |
-| **Palavras Reservadas (15)** | `programa`, `var`, `inteiro`, `booleano`, `se`, `senão`, `enquanto`, `escreva`, `leia`, `verdadeiro`, `falso`, `e`, `ou`, `não`, `fim` |
+| **Palavras Reservadas (18)** | • **Base (15)**: `programa`, `var`, `inteiro`, `booleano`, `se`, `senão`, `enquanto`, `escreva`, `leia`, `verdadeiro`, `falso`, `e`, `ou`, `não`, `fim`<br>• **Extensão Oficial (Opção D - 3)**: `para`, `repita`, `até` |
 | **Identificadores** | Inicia obrigatoriamente com uma letra, seguida de letras, dígitos ou sublinhado `_`. Não pode coincidir com palavras reservadas. |
 | **Tipos Primitivos** | `inteiro` (ex: `0`, `42`, `-10`) e `booleano` (`verdadeiro`, `falso`). |
 | **Operadores** | • **Aritméticos**: `+`, `-`, `*`, `/`, `%`<br>• **Relacionais**: `==`, `!=`, `<`, `<=`, `>`, `>=`<br>• **Lógicos**: `e`, `ou`, `não`<br>• **Atribuição**: `=` |
@@ -86,7 +86,7 @@ Este checklist espelha as exigências formais de conformidade estabelecidas pelo
 - [ ] **4. Mensagens de erro padronizadas com fase, linha e coluna**: Formato `[FASE] Linha L, Coluna C: Descrição`.
 - [ ] **5. AST inspecionável e navegável**: Árvore Sintática Abstrata imprimível e verificável durante a correção.
 - [ ] **6. Tabela de Símbolos completa**: Registro de identificador, tipo, escopo e posição da declaração.
-- [ ] **7. Extensão obrigatória implementada**: Funcionalidade extra implementada, testada, documentada e demonstrada.
+- [x] **7. Extensão obrigatória definida formalmente (Opção D: `para` e `repita ... até`)**: Escolha oficial registrada, justificada teoricamente (*desugaring* na AST) e integrada desde a especificação léxica.
 - [ ] **8. Relatório técnico com declarações formais**: Artigo de 6 a 10 páginas declarando decisões, EBNF, AFD, ferramentas e uso de IA.
 - [ ] **9. Domínio individual do código**: Todos os integrantes aptos a explicar qualquer trecho na arguição oral de 15 min.
 
@@ -107,13 +107,86 @@ Este checklist espelha as exigências formais de conformidade estabelecidas pelo
 
 > ⚠️ **Aviso Crítico de Nota**: Equipes do projeto devem escolher e implementar **uma extensão** até o M4. **Sem a extensão implementada, a nota máxima do Marco 4 fica limitada ao teto de 7,0 de 10**.
 
+### 🏆 Escolha Oficial da Equipe: Opção D — Comandos `para` e `repita ... até`
+
+A equipe optou oficialmente pela **Opção D**, expandindo o conjunto de estruturas de controle da MiniLang com os laços `para` (laço determinado estilo C/Pascal) e `repita ... até` (*repeat-until* estilo Pascal).
+
 | Opção | Extensão | O que exige a mais no Compilador | Situação na Equipe |
 | :---: | :--- | :--- | :---: |
 | **A** | Procedimentos | Procedimentos sem retorno, parâmetros por valor, escopo aninhado e pilha de ativação. | Alternativa |
 | **B** | Vetores | Vetores 1D de inteiros, cálculo de endereço/offset e checagem de limites. | Alternativa |
 | **C** | Tipo Real | Adição do tipo `real` com promoção/coerção implícita de `inteiro` para `real`. | Alternativa |
-| **D** | **Comandos `para` e `repita ... até`** | **Açúcar sintático (*syntactic sugar*) desaçucarado na própria AST para `enquanto`.** | **⭐ ADOTADA (Recomendada)** |
+| **D** | **Comandos `para` e `repita ... até`** | **Açúcar sintático (*syntactic sugar*) desaçucarado na própria AST para nós `enquanto`.** | **⭐ ADOTADA (Oficial)** |
 | **E** | Strings | Tipo cadeia de caracteres com literais `"..."` e concatenação. | Alternativa |
+
+---
+
+### 💡 Justificativa Técnica & Arquitetural da Escolha
+
+1. **Elegância Teórica & Prática de Compiladores Modernos**:
+   * Em linguagens de produção modernas (ex: Haskell, Rust, Python e Scala), estruturas derivadas são rotineiramente tratadas como **Açúcar Sintático (*Syntactic Sugar*)**.
+   * Ao invés de contaminar o backend com novas instruções primitivas, o compilador realiza o processo de **Desaçucarização (*Desugaring / AST Lowering*)** diretamente durante a geração da AST, convertendo os comandos `para` e `repita ... até` em composições equivalentes de comandos básicos (`atribuição` e `enquanto`).
+2. **Mitigação de Riscos no Back-End (M4)**:
+   * Opções como *Procedimentos* (Opção A) e *Vetores* (Opção B) demandam reformulações profundas em alocação de memória na pilha, registros de ativação e cálculo dinâmico de offsets de memória em tempo de execução.
+   * A Opção D transfere o esforço intelectual para a modelagem gramatical e transformação de árvores, permitindo que a análise semântica (M3) e o back-end (M4) reutilizem a infraestrutura sólida e testada do laço `enquanto`, garantindo estabilidade máxima e menor índice de defeitos.
+3. **Alto Impacto Pedagógico na Arguição Oral**:
+   * Na apresentação para o professor, a equipe demonstrará visualmente (via `python minilang.py arquivo.ml --ast`) como o código escrito pelo programador é elegante e enxuto, e como a AST o desdobra matematicamente na semântica fundamental da linguagem.
+
+---
+
+### 📝 Especificação Sintática & Regras de Desaçucarização (*Desugaring*)
+
+#### 1. Comando `para`
+Permite iterações contadas com inicialização, condição de continuidade e passo de incremento/decremento:
+```pascal
+# Código MiniLang com a extensão:
+para (i = 1; i <= 10; i = i + 1) {
+  escreva(i);
+}
+```
+**Transformação Canônica na AST (Desugaring):**
+O nó `ParaNode` é transformado em tempo de parsing em uma sequência de nós nativos:
+```pascal
+# AST equivalente gerada:
+i = 1;
+enquanto (i <= 10) {
+  escreva(i);
+  i = i + 1;
+}
+```
+
+#### 2. Comando `repita ... até`
+Executa o bloco de instruções ao menos uma vez e avalia a condição de término no final (*pós-condição*). O laço encerra quando a condição se torna **verdadeira** (semântica clássica do Pascal):
+```pascal
+# Código MiniLang com a extensão:
+repita {
+  leia(num);
+} até (num > 0);
+```
+**Transformação Canônica na AST (Desugaring):**
+O nó `RepitaAteNode` é expandido no parser para a execução do bloco seguida de um laço `enquanto` com a condição logicamente invertida (`não (condição)`):
+```pascal
+# AST equivalente gerada:
+leia(num);
+enquanto (não (num > 0)) {
+  leia(num);
+}
+```
+
+---
+
+### 🗺️ Roteiro de Integração da Extensão nos 4 Marcos
+
+* **Marco 1 (Léxico - M1)**:
+  * Inclusão imediata das **3 novas palavras reservadas**: `para` (`TK_PARA`), `repita` (`TK_REPITA`) e `até` (`TK_ATE`), elevando o catálogo de palavras reservadas de 15 para **18 palavras**.
+  * Suporte estrito ao caractere acentuado `é` no alfabeto $\Sigma$ e no leitor UTF-8.
+* **Marco 2 (Sintático + AST - M2)**:
+  * Inclusão das regras de produção na gramática EBNF: `<comando_para>` e `<comando_repita>`.
+  * Implementação da função de desaçucaramento (*desugaring*) na construção da AST.
+* **Marco 3 (Semântico - M3)**:
+  * Reutilização automática das verificações de escopo e compatibilidade de tipos (`booleano` para condições e compatibilidade para variáveis do passo).
+* **Marco 4 (Back-End & Apresentação - M4)**:
+  * Demonstração funcional com casos de teste dedicados em `tests/valid/extensao_opcao_d.ml` e explicação do *desugaring* na arguição individual de 15 minutos.
 
 ---
 
