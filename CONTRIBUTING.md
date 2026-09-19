@@ -49,7 +49,7 @@ Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro m
   * Implementar o bônus avaliativo (+0,5 pt): detecção em tempo de compilação de variáveis lidas antes de serem inicializadas.
 * **Arquivos e Diretórios:** `src/semantic/`, `tests/valid/`, `tests/invalid/`, `docs/M3_SEMANTICO.md`.
 * **Responsável:**
-  * 👤 *`[A Definir - Integrante 3]`*
+  * 👤 **Pedro Adaime Ribeiro** - (RA: `12723119338` | GitHub: `@pedrobelane`)
 
 ---
 
