@@ -1,4 +1,4 @@
-﻿# Guia de Contribuição e Alocação da Equipe - MiniLang
+# Guia de Contribuição e Alocação da Equipe - MiniLang
 
 Este documento estabelece a alocação de tarefas, responsabilidades e as diretrizes de desenvolvimento da equipe para a construção do compilador da **MiniLang** (Avaliação A3 de Teoria da Computação e Compiladores — UNIFACS 2026.2).
 
@@ -21,7 +21,7 @@ Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro m
   * Criar a bateria inicial de testes léxicos com casos válidos e inválidos em `tests/`.
 * **Arquivos e Diretórios:** `src/lexer/`, `tests/valid/`, `tests/invalid/`, `docs/M1_LEXICO.md`.
 * **Responsável:**
-  * 👤 *`[A Definir - Integrante 1]`*
+  * 👤 **João Spinola Falcão** (RA: `12723116406` | GitHub: `@Falc01`)
 
 ---
 
@@ -63,7 +63,7 @@ Abaixo está a divisão de tarefas baseada no planejamento técnico dos quatro m
   * Preparar a apresentação de 15 minutos com demonstração prática ao vivo e treinamento mútuo para a arguição individual.
 * **Arquivos e Diretórios:** `src/backend/`, `minilang.py`, `docs/relatorio_final.pdf`.
 * **Responsáveis:**
-  * 👥 *Toda a Equipe (Integrante 1, Integrante 2 e Integrante 3 em conjunto)*
+  * 👥 *Toda a Equipe (João Spinola Falcão, Integrante 2 e Integrante 3 em conjunto)*
 
 ---
 
